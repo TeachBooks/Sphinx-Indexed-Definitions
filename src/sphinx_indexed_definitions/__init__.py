@@ -8,7 +8,7 @@ DEFAULT_NODES = ['strong','emphasis']
 CAPITAL_WORDS = list({'Cartesian','Markov','Euler','Neumann','Newton','Gauss','Lagrange','Hilbert','Frobenius','Navier','Stokes','Laplace','Cauchy','Erdős','Ramanujan',
                       'Kolmogorov','Darcy','Archimedes','Chebychev','Castigliano','Taylor','Maclaurin','Macaulay','Mohr','Jensens','Muller','Breslau','Bernoulli',
                       'Maxwell','Einstein','Froud','Reynolds','Betti','Rayleigh','Ohm','Volt','Ampère','Tesla','Curie','Turing','Murphy','Avogrado','Planck','Feynman',
-                      'Nash','Bequerel','Pascal','Joule','Kelvin','Lenz','Celsius','Fahrenheit','Snell','Watt','Réaumur','Kelvin','Lenz','Celsius','Fahrenheit','Snell'})
+                      'Nash','Bequerel','Pascal','Joule','Kelvin','Lenz','Celsius','Fahrenheit','Snell','Watt','Réaumur','Kelvin','Lenz','Celsius','Fahrenheit','Snell','Boole','Dirichlet','Euclid','Leibniz','Benford','Boyer','Dijkstra','Huygens','Lambert','Poisson','Weierstrass','Abel','Descartes','Fibonacci'})
 
 class IndexedDefinitionDirective(DefinitionDirective):
 
