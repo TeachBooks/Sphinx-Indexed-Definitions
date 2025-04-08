@@ -8,7 +8,9 @@ DEFAULT_NODES = ['strong','emphasis']
 CAPITAL_WORDS = list({'Cartesian','Markov','Euler','Neumann','Newton','Gauss','Lagrange','Hilbert','Frobenius','Navier','Stokes','Laplace','Cauchy','Erdős','Ramanujan',
                       'Kolmogorov','Darcy','Archimedes','Chebychev','Castigliano','Taylor','Maclaurin','Macaulay','Mohr','Jensens','Muller','Breslau','Bernoulli',
                       'Maxwell','Einstein','Froud','Reynolds','Betti','Rayleigh','Ohm','Volt','Ampère','Tesla','Curie','Turing','Murphy','Avogrado','Planck','Feynman',
-                      'Nash','Bequerel','Pascal','Joule','Kelvin','Lenz','Celsius','Fahrenheit','Snell','Watt','Réaumur','Kelvin','Lenz','Celsius','Fahrenheit','Snell','Boole','Dirichlet','Euclid','Leibniz','Benford','Boyer','Dijkstra','Huygens','Lambert','Poisson','Weierstrass','Abel','Descartes','Fibonacci','Hôpital','Poincaré','Volterra','Lotka','Cramer'})
+                      'Nash','Bequerel','Pascal','Joule','Kelvin','Lenz','Celsius','Fahrenheit','Snell','Watt','Réaumur','Kelvin','Lenz','Celsius','Fahrenheit','Snell',
+                      'Boole','Dirichlet','Euclid','Leibniz','Benford','Boyer','Dijkstra','Huygens','Lambert','Poisson','Weierstrass','Abel','Descartes','Fibonacci',
+                      'Hôpital','Poincaré','Volterra','Lotka','Cramer'})
 
 class IndexedDefinitionDirective(DefinitionDirective):
 
@@ -60,16 +62,23 @@ class IndexedDefinitionDirective(DefinitionDirective):
                             new_string = new_string.replace(f"{word.lower()}",f"{word}")
                         node_string = new_string
 
-                    # check if the index should be skipped
-                    skip_index = False
-                    if node_string == "":
-                        continue
-                    for regexp in self.env.config.sphinx_indexed_defs_skip_indices:
-                        if re.search(regexp,node_string):
-                            skip_index = True
-                            break
-                    if skip_index:
-                        continue
+                    if self.env.config.sphinx_indexed_defs_split_brackets:
+                        if "(" not in node_string:
+                            # check for weird references
+                            if "classes" not in node_string:
+                                stuff_to_index.add(node_string)
+                            elif "xref" not in node_string:
+                                stuff_to_index.add(node_string)
+                        else:    
+                            bracketted = re.findall(r"\((.*?)\)", node_string)
+                            node_string_none = node_string
+                            node_string_all = node_string
+                            for word in bracketted:
+                                node_string_none = node_string_none.replace(f"({word})","")
+                                node_string_all = node_string_all.replace(f"({word})",f"{word}")
+                            stuff_to_index.add(node_string_all)
+                            stuff_to_index.add(node_string_none)
+                            
                     # check for weird references
                     if "classes" not in node_string:
                         stuff_to_index.add(node_string)
@@ -79,6 +88,16 @@ class IndexedDefinitionDirective(DefinitionDirective):
         indexes = ""
         if len(stuff_to_index)>0:
             for index in stuff_to_index:
+                # check if the index should be skipped
+                skip_index = False
+                if index == "":
+                    continue
+                for regexp in self.env.config.sphinx_indexed_defs_skip_indices:
+                    if re.search(regexp,index):
+                        skip_index = True
+                        break
+                if skip_index:
+                    continue
                 indexes += f"{{index}}`{index}`"
         start_node = [nodes.raw(None, "<div style=\"overflow:hidden;height:0px;margin:calc(var(--bs-body-font-size)*-0.5);\">", format="html")]
         end_node = [nodes.raw(None, "</div>", format="html")]
@@ -94,6 +113,7 @@ def setup(app: Sphinx):
     app.add_config_value('sphinx_indexed_defs_lowercase_indices',True,'env')
     app.add_config_value('sphinx_indexed_defs_index_titles',True,'env')
     app.add_config_value('sphinx_indexed_defs_capital_words',[],'env')
+    app.add_config_value('sphinx_indexed_defs_split_brackets',True,'env')
 
     app.connect('config-inited',parse_config)
 
