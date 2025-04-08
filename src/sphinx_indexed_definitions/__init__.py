@@ -76,8 +76,22 @@ class IndexedDefinitionDirective(DefinitionDirective):
                             for word in bracketted:
                                 node_string_none = node_string_none.replace(f"({word})","")
                                 node_string_all = node_string_all.replace(f"({word})",f"{word}")
-                            stuff_to_index.add(node_string_all)
-                            stuff_to_index.add(node_string_none)
+                            # check for weird references
+                            if "classes" not in node_string_all:
+                                stuff_to_index.add(node_string_all)
+                            elif "xref" not in node_string_all:
+                                stuff_to_index.add(node_string_all)
+                            # check for weird references
+                            if "classes" not in node_string_none:
+                                stuff_to_index.add(node_string_none)
+                            elif "xref" not in node_string_none:
+                                stuff_to_index.add(node_string_none)
+                    else:
+                        # check for weird references
+                        if "classes" not in node_string:
+                            stuff_to_index.add(node_string)
+                        elif "xref" not in node_string:
+                            stuff_to_index.add(node_string)
 
         indexes = ""
         if len(stuff_to_index)>0:
