@@ -62,7 +62,7 @@ class IndexedDefinitionDirective(DefinitionDirective):
                             new_string = new_string.replace(f"{word.lower()}",f"{word}")
                         node_string = new_string
 
-                    if self.env.config.sphinx_indexed_defs_split_brackets:
+                    if self.env.config.sphinx_indexed_defs_remove_brackets:
                         if "(" not in node_string:
                             # check for weird references
                             if "classes" not in node_string:
@@ -78,12 +78,6 @@ class IndexedDefinitionDirective(DefinitionDirective):
                                 node_string_all = node_string_all.replace(f"({word})",f"{word}")
                             stuff_to_index.add(node_string_all)
                             stuff_to_index.add(node_string_none)
-                            
-                    # check for weird references
-                    if "classes" not in node_string:
-                        stuff_to_index.add(node_string)
-                    elif "xref" not in node_string:
-                        stuff_to_index.add(node_string)
 
         indexes = ""
         if len(stuff_to_index)>0:
@@ -113,7 +107,7 @@ def setup(app: Sphinx):
     app.add_config_value('sphinx_indexed_defs_lowercase_indices',True,'env')
     app.add_config_value('sphinx_indexed_defs_index_titles',True,'env')
     app.add_config_value('sphinx_indexed_defs_capital_words',[],'env')
-    app.add_config_value('sphinx_indexed_defs_split_brackets',True,'env')
+    app.add_config_value('sphinx_indexed_defs_remove_brackets',True,'env')
 
     app.connect('config-inited',parse_config)
 
