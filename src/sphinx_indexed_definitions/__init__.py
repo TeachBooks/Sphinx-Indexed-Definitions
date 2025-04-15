@@ -37,7 +37,7 @@ class IndexedDefinitionDirective(DefinitionDirective):
                         new_string = new_string.replace(f"${mathe}$",f"${old_math[eeeee]}$")
                     for word in self.env.config.sphinx_indexed_defs_capital_words:
                         new_string = new_string.replace(f"{word.lower()}",f"{word}")
-                    title = new_string
+                    title = new_string.strip()
                 stuff_to_index.add(title)
         for typ in self.env.config.sphinx_indexed_defs_indexed_nodes:
             assert typ in SUPPORTED_NODES, f"the node {typ} is not supported"
@@ -47,20 +47,20 @@ class IndexedDefinitionDirective(DefinitionDirective):
                 typ_nodes = def_node.findall(cls)
                 for node in typ_nodes:
                     node_string = node.__str__()
-                    node_string = node_string.replace(f"<{typ}>","")
-                    node_string = node_string.replace(f"</{typ}>","")
-                    node_string = node_string.replace(f"<{typ}/>","")
-                    node_string = node_string.replace("<math>","$")
-                    node_string = node_string.replace("</math>","$")
+                    node_string = node_string.replace(f"<{typ}>","").strip()
+                    node_string = node_string.replace(f"</{typ}>","").strip()
+                    node_string = node_string.replace(f"<{typ}/>","").strip()
+                    node_string = node_string.replace("<math>","$").strip()
+                    node_string = node_string.replace("</math>","$").strip()
                     if self.env.config.sphinx_indexed_defs_lowercase_indices:
-                        new_string = node_string.lower()
+                        new_string = node_string.lower().strip()
                         new_math = re.findall(r"\$(.*?)\$", new_string)
                         old_math = re.findall(r"\$(.*?)\$", node_string)
                         for eeeee,mathe in enumerate(new_math):
-                            new_string = new_string.replace(f"${mathe}$",f"${old_math[eeeee]}$")
+                            new_string = new_string.replace(f"${mathe}$",f"${old_math[eeeee]}$").strip()
                         for word in self.env.config.sphinx_indexed_defs_capital_words:
-                            new_string = new_string.replace(f"{word.lower()}",f"{word}")
-                        node_string = new_string
+                            new_string = new_string.replace(f"{word.lower()}",f"{word}").strip()
+                        node_string = new_string.strip()
 
                     if self.env.config.sphinx_indexed_defs_remove_brackets:
                         if "(" not in node_string:
@@ -71,11 +71,11 @@ class IndexedDefinitionDirective(DefinitionDirective):
                                 stuff_to_index.add(node_string)
                         else:    
                             bracketted = re.findall(r"\((.*?)\)", node_string)
-                            node_string_none = node_string
-                            node_string_all = node_string
+                            node_string_none = node_string.strip()
+                            node_string_all = node_string.strip()
                             for word in bracketted:
-                                node_string_none = node_string_none.replace(f"({word})","")
-                                node_string_all = node_string_all.replace(f"({word})",f"{word}")
+                                node_string_none = node_string_none.replace(f"({word})","").strip()
+                                node_string_all = node_string_all.replace(f"({word})",f"{word}").strip()
                             # check for weird references
                             if "classes" not in node_string_all:
                                 stuff_to_index.add(node_string_all)
@@ -106,7 +106,10 @@ class IndexedDefinitionDirective(DefinitionDirective):
                         break
                 if skip_index:
                     continue
-                indexes += f"{{index}}`{index}`"
+                if self.env.config.sphinx_indexed_defs_force_main:
+                    indexes += f"{{index}}`! {index}`"
+                else:
+                    indexes += f"{{index}}`{index}`"
         start_node = [nodes.raw(None, "<div style=\"overflow:hidden;height:0px;margin:calc(var(--bs-body-font-size)*-0.5);\">", format="html")]
         end_node = [nodes.raw(None, "</div>", format="html")]
         parsed_indexes = self.parse_text_to_nodes(indexes)
@@ -122,6 +125,7 @@ def setup(app: Sphinx):
     app.add_config_value('sphinx_indexed_defs_index_titles',True,'env')
     app.add_config_value('sphinx_indexed_defs_capital_words',[],'env')
     app.add_config_value('sphinx_indexed_defs_remove_brackets',True,'env')
+    app.add_config_value('sphinx_indexed_defs_force_main',True,'env')
 
     app.connect('config-inited',parse_config)
 
