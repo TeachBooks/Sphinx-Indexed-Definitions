@@ -76,3 +76,32 @@ sphinx:
         -
         -
 ```
+
+- `sphinx_indexed_defs_indexed_nodes`: `['strong','emphasis']` (_default_) or **list of strings**:
+  - All nodes of the provided classes from the Python submodule `docutils.nodes` will be extracted and converted to entries in the index.
+  - Supported classes are `strong`, `emphasis` and `literal`.
+- `sphinx_indexed_defs_skip_indices`: `[]` (_default_) or **list of strings**:
+  - All entries that match at least one _regular expression_ within the provided list will not be added to the index (i.e. skipped).
+  - An example is `['\bdet\w*','\$i\$-th entry']`, which causes any entry that starts with _det_ to be skipped and the entry _$i$-th entry_ will also be skipped.
+  - Note that special characters must be escaped.
+- `sphinx_indexed_defs_lowercase_indices`: `true` (_default_) or `false`:
+  - If `true`, all extracted entries will be converted to lower case, except for words that are provided in `sphinx_indexed_defs_capital_words` and a prefixed set of common names from beta sciences. 
+  - This prefixed set can be found in the source `py`-file of this extension.
+  - Users are welcome to add names to this list by forking and opening a pull request. 
+  - If `false`, all extracted entries will be added to the index as written.
+- `sphinx_indexed_defs_index_titles`: `true` (_default_) or `false`:
+  - If `true`, any title provided in a `prf:definition` admonition will also be added as an entry to the index.
+  - If `false`, all titles will be ignored.
+- `sphinx_indexed_defs_capital_words`: `[]` (_default_) or **list of strings**:
+  - See `sphinx_indexed_defs_lowercase_indices`.
+- `sphinx_indexed_defs_remove_brackets`: `true` (_default_) or `false`:
+  - If `true`, any extracted term containing words between matching opening and closing round brackets, i.e. `(` and `)`, are converted to two entries: one with the entire term with all round brackets removed, and one with all words between matching round brackets removed (including the brackets).
+  - An example: the extracted term `(id) dignissim` will result in two entries: `id dignissim` and `dignissim`.
+  - If `false`, no parsing of terms with brackets will occur and terms are converted to entries as written.
+- `sphinx_indexed_defs_force_main`: `true` (_default_) or `false`:
+  - If `true`, all extracted terms will be added as the **main** entry to the index, which means the entry will be emphasized in the generated index.
+  - If `false`, extracted terms will not be emphasized in the generated index.
+
+  ## Contribute
+
+This tool's repository is stored on [GitHub](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). If you'd like to contribute, you can create a fork and open a pull request on the [GitHub repository](https://github.com/TeachBooks/Sphinx-Indexed-Definitions).
