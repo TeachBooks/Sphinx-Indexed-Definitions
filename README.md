@@ -19,6 +19,8 @@ augue. Maecenas aliquam leo vitae velit interdum efficitur.
 
 this extension, once loaded, will add (with default settings) the terms Lorem, **pharetra**, *id dignissim*, *dignissim* and **fermentum Kelvin** to the generated index.
 
+This extension can be used in conjunction with the regular usage if generating an index, as explained at [Indexes](https://jupyterbook.org/en/stable/content/content-blocks.html#indexes).
+
 ## Installation
 To use this extenstion, follow these steps (be aware, more steps then usual):
 
