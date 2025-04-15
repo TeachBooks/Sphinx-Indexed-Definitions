@@ -2,19 +2,22 @@
 
 ## Introduction
 
-This Sphinx extension provides an easy way to add entries to a genreated index based on **strong**, *emphasized* and/or `literal` terms used within `prf:definition` admonitions.
+This Sphinx extension provides an easy way to add entries to a genreated index based on **strong**, *emphasized* and/or `literal` terms used within `prf:definition` admonitions and the title of the adminition.
 
 ## What does it do?
 
 If you code includes an admonition with the source code
 
 ```md
-:::{prf:definition}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse **Pharetra**, ex ut commodo varius, est justo vestibulum nunc, *(id) dignissim* lorem nibh in mauris. Duis varius lorem et neque posuere, ac elementum eros consequat. Maecenas sed risus suscipit, **fermentum Kelvin** quam vitae, consectetur augue. Maecenas aliquam leo vitae velit interdum efficitur.
+:::{prf:definition} Lorem
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse **Pharetra**, ex ut commodo varius,
+est justo vestibulum nunc, *(id) dignissim* lorem nibh in mauris. Duis varius lorem et neque posuere,
+ac elementum eros consequat. Maecenas sed risus suscipit, **fermentum Kelvin** quam vitae, consectetur
+augue. Maecenas aliquam leo vitae velit interdum efficitur.
 :::
 ```
 
-this extension, once loaded, will add (with default settings) the terms **pharetra**, *id dignissim*, *dignissim* and **fermentum Kelvin** to the generated index.
+this extension, once loaded, will add (with default settings) the terms Lorem, **pharetra**, *id dignissim*, *dignissim* and **fermentum Kelvin** to the generated index.
 
 ## Installation
 To use this extenstion, follow these steps:
