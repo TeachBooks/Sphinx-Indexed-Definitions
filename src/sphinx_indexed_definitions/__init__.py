@@ -107,7 +107,7 @@ class IndexedDefinitionDirective(DefinitionDirective):
                 if skip_index:
                     continue
                 if self.env.config.sphinx_indexed_defs_force_main:
-                    indexes += f"{{index}}`! {index}`"
+                    indexes += f"{{index}}`!{index}`"
                 else:
                     indexes += f"{{index}}`{index}`"
         start_node = [nodes.raw(None, "<div style=\"overflow:hidden;height:0px;margin:calc(var(--bs-body-font-size)*-0.5);\">", format="html")]
