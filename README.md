@@ -103,6 +103,21 @@ sphinx:
 - `sphinx_indexed_defs_force_main`: `true` (_default_) or `false`:
   - If `true`, all extracted terms will be added as the **main** entry to the index, which means the entry will be emphasized in the generated index.
   - If `false`, extracted terms will not be emphasized in the generated index.
+ 
+## Provided code
+
+In case a `prf:definition` admonition should be skipped during indexing, add the class `skipindexing` to the admonition, for example:
+
+```md
+:::{prf:definition} Lorem
+:class: skipindexing
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse **Pharetra**, ex ut commodo varius,
+est justo vestibulum nunc, *(id) dignissim* lorem nibh in mauris. Duis varius lorem et neque posuere,
+ac elementum eros consequat. Maecenas sed risus suscipit, **fermentum Kelvin** quam vitae, consectetur
+augue. Maecenas aliquam leo vitae velit interdum efficitur.
+:::
+```
 
 ## Contribute
 
