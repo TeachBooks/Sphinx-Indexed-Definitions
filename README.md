@@ -74,6 +74,7 @@ sphinx:
         sphinx_indexed_defs_capital_words:     []                    # default value
         sphinx_indexed_defs_remove_brackets:   true                  # default value
         sphinx_indexed_defs_force_main:        true                  # default value
+        sphinx_indexed_defs_index_theorems:    true                  # default value
         -
         -
         -
@@ -103,6 +104,9 @@ sphinx:
 - `sphinx_indexed_defs_force_main`: `true` (_default_) or `false`:
   - If `true`, all extracted terms will be added as the **main** entry to the index, which means the entry will be emphasized in the generated index.
   - If `false`, extracted terms will not be emphasized in the generated index.
+  `sphinx_indexed_defs_index_theorems`: `true` (_default_) or `false`:
+  - If `true`, any title provided in a `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary` or `prf:proposition` admonition will also be added as an entry to the index.
+  - If `false`, all titles provided in `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary` and `prf:proposition` admonitions will be ignored.
  
 ## Provided code
 
