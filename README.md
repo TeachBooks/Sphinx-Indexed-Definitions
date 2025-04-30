@@ -13,7 +13,7 @@ This section is useful for user type 3-5.
 
 ````
 
-# Sphinx Indexed Definitions
+# Indexed Definitions
 
 ## Introduction
 
