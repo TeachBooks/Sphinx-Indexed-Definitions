@@ -19,7 +19,7 @@ augue. Maecenas aliquam leo vitae velit interdum efficitur.
 
 this extension, once loaded, will add (with default settings) the terms Lorem, **pharetra**, *id dignissim*, *dignissim* and **fermentum Kelvin** to the generated index.
 
-This extension can be used in conjunction with the regular usage if generating an index, as explained at [Indexes](https://jupyterbook.org/en/stable/content/content-blocks.html#indexes).
+This extension can be used in conjunction with the regular usage of generating an index, as explained at [Indexes](https://jupyterbook.org/en/stable/content/content-blocks.html#indexes).
 
 ## Installation
 To use this extenstion, follow these steps (be aware, more steps then usual):
@@ -94,7 +94,7 @@ sphinx:
   - If `false`, all extracted entries will be added to the index as written.
 - `sphinx_indexed_defs_index_titles`: `true` (_default_) or `false`:
   - If `true`, any title provided in a `prf:definition` admonition will also be added as an entry to the index.
-  - If `false`, all titles will be ignored.
+  - If `false`, all titles in `prf:definition` admonitions will be ignored.
 - `sphinx_indexed_defs_capital_words`: `[]` (_default_) or **list of strings**:
   - See `sphinx_indexed_defs_lowercase_indices`.
 - `sphinx_indexed_defs_remove_brackets`: `true` (_default_) or `false`:
@@ -104,13 +104,13 @@ sphinx:
 - `sphinx_indexed_defs_force_main`: `true` (_default_) or `false`:
   - If `true`, all extracted terms will be added as the **main** entry to the index, which means the entry will be emphasized in the generated index.
   - If `false`, extracted terms will not be emphasized in the generated index.
-  `sphinx_indexed_defs_index_theorems`: `true` (_default_) or `false`:
+- `sphinx_indexed_defs_index_theorems`: `true` (_default_) or `false`:
   - If `true`, any title provided in a `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary` or `prf:proposition` admonition will also be added as an entry to the index.
   - If `false`, all titles provided in `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary` and `prf:proposition` admonitions will be ignored.
  
 ## Provided code
 
-In case a `prf:definition` admonition should be skipped during indexing, add the class `skipindexing` to the admonition, for example:
+In case a single admonition should be skipped during indexing, add the class `skipindexing` to the admonition, for example:
 
 ```md
 :::{prf:definition} Lorem
@@ -122,6 +122,10 @@ ac elementum eros consequat. Maecenas sed risus suscipit, **fermentum Kelvin** q
 augue. Maecenas aliquam leo vitae velit interdum efficitur.
 :::
 ```
+
+## Example
+
+An example of a book using this extension can be found at https://douden.github.io/openlabook/.
 
 ## Contribute
 
