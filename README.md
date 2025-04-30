@@ -1,3 +1,18 @@
+````{margin}
+```{attributiongrey} Attribution
+:class: attribution
+This page reuses MIT licensed content from {cite:t}`sphinx-indexed-definitions`. {fa}`quote-left`{ref}`Find out more here.<external_resources>`
+```
+
+```{admonition} User types
+:class: tip
+This section is useful for user type 3-5.
+```
++++
+{bdg-primary}`Sphinx Extension`
+
+````
+
 # Sphinx Indexed Definitions
 
 ## Introduction
@@ -129,4 +144,5 @@ An example of a book using this extension can be found at https://douden.github.
 
 ## Contribute
 
-This tool's repository is stored on [GitHub](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). If you'd like to contribute, you can create a fork and open a pull request on the [GitHub repository](https://github.com/TeachBooks/Sphinx-Indexed-Definitions).
+This tool's repository is stored on [GitHub](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). If you'd like to contribute, you can create a fork and open a pull request on the [GitHub repository](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). 
+The `README.md` of the branch `manual` is also part of the [TeachBooks manual](https://teachbooks.io/manual).
