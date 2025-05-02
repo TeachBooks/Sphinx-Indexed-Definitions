@@ -129,4 +129,5 @@ An example of an index generated using this extension can be found at https://do
 
 ## Contribute
 
-This tool's repository is stored on [GitHub](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). If you'd like to contribute, you can create a fork and open a pull request on the [GitHub repository](https://github.com/TeachBooks/Sphinx-Indexed-Definitions).
+This tool's repository is stored on [GitHub](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). If you'd like to contribute, you can create a fork and open a pull request on the [GitHub repository](https://github.com/TeachBooks/Sphinx-Indexed-Definitions). 
+The `README.md` of the branch `manual` is also part of the [TeachBooks manual](https://teachbooks.io/manual).
