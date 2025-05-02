@@ -125,7 +125,7 @@ augue. Maecenas aliquam leo vitae velit interdum efficitur.
 
 ## Example
 
-An example of a book using this extension can be found at https://douden.github.io/openlabook/.
+An example of an index generated using this extension can be found at https://douden.github.io/openlabook/main/genindex.html.
 
 ## Contribute
 
