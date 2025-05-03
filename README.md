@@ -1,8 +1,4 @@
 ````{margin}
-```{attributiongrey} Attribution
-:class: attribution
-This page reuses MIT licensed content from {cite:t}`sphinx-indexed-definitions`. {fa}`quote-left`{ref}`Find out more here.<external_resources>`
-```
 
 ```{admonition} User types
 :class: tip
