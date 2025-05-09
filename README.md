@@ -28,14 +28,14 @@ To use this extenstion, follow these steps (be aware, more steps then usual):
 
 Install the module `sphinx-indexed-definitions` package using `pip`:
 ```
-pip install git+https://github.com/TeachBooks/Sphinx-Indexed-Definitions.git
+pip install sphinx-indexed-definitions
 ```
     
 **Step 2: Add to `requirements.txt`**
 
 Make sure that the package is included in your project's `requirements.txt` to track the dependency:
 ```
-git+https://github.com/TeachBooks/Sphinx-Indexed-Definitions.git
+sphinx-indexed-definitions
 ```
 
 **Step 3: Enable in `_config.yml`**
