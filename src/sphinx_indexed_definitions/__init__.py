@@ -123,12 +123,12 @@ def setup(app: Sphinx):
     app.add_config_value('sphinx_indexed_defs_skip_indices',[],'env')
     app.add_config_value('sphinx_indexed_defs_lowercase_indices',True,'env')
     app.add_config_value('sphinx_indexed_defs_index_titles',True,'env')
-    app.add_config_value('sphinx_indexed_defs_capital_words',[],'env')
+    app.add_config_value('sphinx_indexed_defs_capital_words',[],'html')
     app.add_config_value('sphinx_indexed_defs_remove_brackets',True,'env')
     app.add_config_value('sphinx_indexed_defs_force_main',True,'env')
     app.add_config_value('sphinx_indexed_defs_index_theorems',True,'env')
 
-    app.connect('config-inited',parse_config)
+    app.connect('builder-inited',parse_config)
 
     app.setup_extension('sphinx_proof')
 
@@ -141,7 +141,7 @@ def setup(app: Sphinx):
 
     return {}
 
-def parse_config(app:Sphinx,config):
+def parse_config(app:Sphinx):
     
     capital_words = app.config.sphinx_indexed_defs_capital_words + CAPITAL_WORDS
     app.config.sphinx_indexed_defs_capital_words = list(set(capital_words))
