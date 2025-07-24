@@ -255,7 +255,10 @@ def parse_only_title(self,def_nodes):
             indexes += f"{{index}}`{index}`"
     start_node = [nodes.raw(None, "<div style=\"overflow:hidden;height:0px;margin:calc(var(--bs-body-font-size)*-0.5);\">", format="html")]
     end_node = [nodes.raw(None, "</div>", format="html")]
-    parsed_indexes = self.parse_text_to_nodes(indexes)
+    try:
+          parsed_indexes = self.parse_text_to_nodes(indexes)
+        except:
+          parsed_indexes = []
     node_list = start_node + parsed_indexes + end_node + def_nodes
 
     return node_list
