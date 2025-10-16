@@ -1,5 +1,5 @@
 from sphinx.application import Sphinx
-from sphinx_proof.proof_type import DefinitionDirective, TheoremDirective, LemmaDirective, ConjectureDirective, CorollaryDirective, PropositionDirective
+from sphinx_proof.proof_type import DefinitionDirective, TheoremDirective, LemmaDirective, ConjectureDirective, CorollaryDirective, PropositionDirective, NotationDirective
 import re
 from docutils import nodes
 
@@ -113,9 +113,9 @@ class IndexedDefinitionDirective(DefinitionDirective):
         start_node = [nodes.raw(None, "<div style=\"overflow:hidden;height:0px;margin:calc(var(--bs-body-font-size)*-0.5);\">", format="html")]
         end_node = [nodes.raw(None, "</div>", format="html")]
         try:
-          parsed_indexes = self.parse_text_to_nodes(indexes)
+            parsed_indexes = self.parse_text_to_nodes(indexes)
         except:
-          parsed_indexes = []
+            parsed_indexes = []
         node_list = start_node + parsed_indexes + end_node + def_nodes
 
         return node_list
@@ -141,6 +141,7 @@ def setup(app: Sphinx):
     app.add_directive_to_domain('prf','conjecture',IndexedConjectureDirective,override=True)
     app.add_directive_to_domain('prf','corollary',IndexedCorollaryDirective,override=True)
     app.add_directive_to_domain('prf','proposition',IndexedPropositionDirective,override=True)
+    app.add_directive_to_domain('prf','notation',IndexedNotationDirective,override=True)
 
     return {}
 
@@ -213,6 +214,20 @@ class IndexedPropositionDirective(PropositionDirective):
 
         # first the normal parse:
         def_nodes = PropositionDirective.run(self)
+        # get the classes and do no index stuff if told so.
+        classes = self.options.get('class')
+        if classes is not None:
+            if "skipindexing" in classes:
+                return def_nodes
+        # now find the (optional) title
+        return parse_only_title(self,def_nodes)
+    
+class IndexedNotationDirective(NotationDirective):
+
+    def run(self):        
+
+        # first the normal parse:
+        def_nodes = NotationDirective.run(self)
         # get the classes and do no index stuff if told so.
         classes = self.options.get('class')
         if classes is not None:
