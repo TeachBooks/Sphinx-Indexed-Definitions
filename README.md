@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This Sphinx extension provides an easy way to add entries to a genreated index based on **strong**, *emphasized* and/or `literal` terms used within `prf:definition` admonitions and the title of the adminition.
+This Sphinx extension provides an easy way to add entries to a generated index based on **strong**, *emphasized* and/or `literal` terms used within `prf:definition` admonitions and the title of the admonition.
 
 ## What does it do?
 
@@ -21,8 +21,20 @@ this extension, once loaded, will add (with default settings) the terms Lorem, *
 
 This extension can be used in conjunction with the regular usage of generating an index, as explained at [Indexes](https://jupyterbook.org/en/stable/content/content-blocks.html#indexes).
 
+If one `prf:definition` admonition contains a single term several times, it will only be added once to the index. If the same term is used in several admonitions, it will be added to the index with multiple references.
+
+If a term has multiple references, the generated index will attempt to sort these references in the order of appearance in the source code.
+
+> [!WARNING]
+> The sorting in this extension assumes that the extension `Sphinx-external-toc` is used to define the table of contents.
+
+> [!WARNING]
+> The sorting in this extension patches the native Sphinx index sorting behavior.
+
+Footnotes in terms will be removed, and the term will be added to the index without the footnote.
+
 ## Installation
-To use this extenstion, follow these steps (be aware, more steps then usual):
+To use this extension, follow these steps (be aware, more steps then usual):
 
 **Step 1: Install the Package**
 
@@ -105,9 +117,12 @@ sphinx:
   - If `true`, all extracted terms will be added as the **main** entry to the index, which means the entry will be emphasized in the generated index.
   - If `false`, extracted terms will not be emphasized in the generated index.
 - `sphinx_indexed_defs_index_theorems`: `true` (_default_) or `false`:
-  - If `true`, any title provided in a `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary` or `prf:proposition` admonition will also be added as an entry to the index.
-  - If `false`, all titles provided in `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary` and `prf:proposition` admonitions will be ignored.
- 
+  - If `true`, any title provided in a `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary`, `prf:proposition` or `prf:notation` admonition will also be added as an entry to the index.
+  - If `false`, all titles provided in `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary`, `prf:proposition` and `prf:notation` admonitions will be ignored.
+- `sphinx_indexed_defs_index_theorems_terms`: `false` (_default_) or `true`:
+  - If `true`, any terms provided in a `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary`, `prf:proposition` or `prf:notation` admonition will also be added as an entry to the index.
+  - If `false`, all terms provided in `prf:theorem`, `prf:lemma`, `prf:conjecture`, `prf:corollary`, `prf:proposition` and `prf:notation` admonitions will be ignored.
+
 ## Provided code
 
 In case a single admonition should be skipped during indexing, add the class `skipindexing` to the admonition, for example:
