@@ -1,13 +1,11 @@
 from sphinx.application import Sphinx
 from sphinx_proof.proof_type import DefinitionDirective, TheoremDirective, LemmaDirective, ConjectureDirective, CorollaryDirective, PropositionDirective, NotationDirective
+from pathlib import PurePosixPath
+import os
 import re
 from docutils import nodes
 from sphinx.environment.adapters.indexentries import IndexEntries
-
-from sphinx.util import logging
-
-logger = logging.getLogger(__name__)
-
+import yaml
 
 SUPPORTED_NODES = ['strong','emphasis','literal']
 DEFAULT_NODES = ['strong','emphasis']
@@ -36,6 +34,11 @@ class IndexedDefinitionDirective(DefinitionDirective):
         if self.env.config.sphinx_indexed_defs_index_titles:
             if len(self.arguments) != 0:
                 title = self.arguments[0]
+                # Check if a footnote is inside the title, and if so, remove it from the string to be indexed
+                # Assume [^ ] pattern for footnotes in the title
+                footnotes = re.findall(r"\[\^.*?\]", title)
+                for note in footnotes:
+                    title = title.replace(note, "")
                 if self.env.config.sphinx_indexed_defs_lowercase_indices:
                     new_string = title.lower()
                     new_math = re.findall(r"\$(.*?)\$", new_string)
@@ -60,6 +63,11 @@ class IndexedDefinitionDirective(DefinitionDirective):
                     node_string = node_string.replace(f"<{typ}/>","").strip()
                     node_string = node_string.replace("<math>","$").strip()
                     node_string = node_string.replace("</math>","$").strip()
+                    # check if a footnote is inside the node, and if so, remove it from the string to be indexed
+                    footnotes = list(node.findall(nodes.footnote_reference))
+                    if footnotes:
+                        for note in footnotes:
+                            node_string = node_string.replace(note.__str__(),"")
                     if self.env.config.sphinx_indexed_defs_lowercase_indices:
                         new_string = node_string.lower().strip()
                         new_math = re.findall(r"\$(.*?)\$", new_string)
@@ -163,6 +171,9 @@ def setup(app: Sphinx):
     app.add_directive_to_domain('prf','corollary',IndexedCorollaryDirective,override=True)
     app.add_directive_to_domain('prf','proposition',IndexedPropositionDirective,override=True)
     app.add_directive_to_domain('prf','notation',IndexedNotationDirective,override=True)
+
+    
+    app.connect("builder-inited", lambda app: patch_index(app))
 
     return {}
 
@@ -297,19 +308,23 @@ def parse_only_title(self,def_nodes):
         
     stuff_to_index = set()
     # find out if a title has been set (and has to be indexed)
-    if self.env.config.sphinx_indexed_defs_index_theorems:
-        if len(self.arguments) != 0:
-            title = self.arguments[0]
-            if self.env.config.sphinx_indexed_defs_lowercase_indices:
-                new_string = title.lower()
-                new_math = re.findall(r"\$(.*?)\$", new_string)
-                old_math = re.findall(r"\$(.*?)\$", title)
-                for eeeee,mathe in enumerate(new_math):
-                    new_string = new_string.replace(f"${mathe}$",f"${old_math[eeeee]}$")
-                for word in self.env.config.sphinx_indexed_defs_capital_words:
-                    new_string = new_string.replace(f"{word.lower()}",f"{word}")
-                title = new_string.strip()
-            stuff_to_index.add(title)
+    if len(self.arguments) != 0:
+        title = self.arguments[0]
+        # Check if a footnote is inside the title, and if so, remove it from the string to be indexed
+        # Assume [^ ] pattern for footnotes in the title
+        footnotes = re.findall(r"\[\^.*?\]", title)
+        for note in footnotes:
+            title = title.replace(note, "")
+        if self.env.config.sphinx_indexed_defs_lowercase_indices:
+            new_string = title.lower()
+            new_math = re.findall(r"\$(.*?)\$", new_string)
+            old_math = re.findall(r"\$(.*?)\$", title)
+            for eeeee,mathe in enumerate(new_math):
+                new_string = new_string.replace(f"${mathe}$",f"${old_math[eeeee]}$")
+            for word in self.env.config.sphinx_indexed_defs_capital_words:
+                new_string = new_string.replace(f"{word.lower()}",f"{word}")
+            title = new_string.strip()
+        stuff_to_index.add(title)
 
     indexes = ""
     if len(stuff_to_index)>0:
@@ -352,6 +367,11 @@ def parse_only_terms(self,def_nodes):
                 node_string = node_string.replace(f"<{typ}/>","").strip()
                 node_string = node_string.replace("<math>","$").strip()
                 node_string = node_string.replace("</math>","$").strip()
+                # check if a footnote is inside the node, and if so, remove it from the string to be indexed
+                footnotes = list(node.findall(nodes.footnote_reference))
+                if footnotes:
+                    for note in footnotes:
+                        node_string = node_string.replace(note.__str__(),"")
                 if self.env.config.sphinx_indexed_defs_lowercase_indices:
                     new_string = node_string.lower().strip()
                     new_math = re.findall(r"\$(.*?)\$", new_string)
@@ -425,6 +445,11 @@ def parse_title_and_terms(self,def_nodes):
     titles_to_index = set()
     if len(self.arguments) != 0:
         title = self.arguments[0]
+        # Check if a footnote is inside the title, and if so, remove it from the string to be indexed
+        # Assume [^ ] pattern for footnotes in the title
+        footnotes = re.findall(r"\[\^.*?\]", title)
+        for note in footnotes:
+            title = title.replace(note, "")
         if self.env.config.sphinx_indexed_defs_lowercase_indices:
             new_string = title.lower()
             new_math = re.findall(r"\$(.*?)\$", new_string)
@@ -450,6 +475,11 @@ def parse_title_and_terms(self,def_nodes):
                 node_string = node_string.replace(f"<{typ}/>","").strip()
                 node_string = node_string.replace("<math>","$").strip()
                 node_string = node_string.replace("</math>","$").strip()
+                # check if a footnote is inside the node, and if so, remove it from the string to be indexed
+                footnotes = list(node.findall(nodes.footnote_reference))
+                if footnotes:
+                    for note in footnotes:
+                        node_string = node_string.replace(note.__str__(),"")
                 if self.env.config.sphinx_indexed_defs_lowercase_indices:
                     new_string = node_string.lower().strip()
                     new_math = re.findall(r"\$(.*?)\$", new_string)
@@ -529,3 +559,144 @@ def parse_title_and_terms(self,def_nodes):
     node_list = start_node + parsed_indexes + end_node + def_nodes
 
     return node_list
+
+
+def patch_index(app):
+    env = app.env
+
+    # -----------------------------
+    # Build TOC document order
+    # -----------------------------
+    doc_order = build_doc_order(env)
+
+    # -----------------------------
+    # Build anchor positions per doc
+    # -----------------------------
+    anchor_positions = build_anchor_positions(env)
+
+    # -----------------------------
+    # Monkeypatch
+    # -----------------------------
+    original = IndexEntries.create_index
+
+    def custom_create_index(self, builder, group_entries=True):
+        content = original(self, builder, group_entries)
+
+        for _, entries in content:
+            for i, (term, (links, subitems, key)) in enumerate(entries):
+
+                def sort_key(link):
+                    # Current Sphinx index targets are (main, uri) pairs.
+                    _, uri = link
+
+                    if not uri:
+                        return (10**9, 10**9)
+
+                    target = uri.split("#", 1)[0]
+                    anchor = uri.split("#", 1)[1] if "#" in uri else ""
+                    docname = target[:-5] if target.endswith(".html") else target
+
+                    # 1. TOC order
+                    doc_pos = doc_order.get(docname, 10**9)
+
+                    # 2. Prefer numeric index anchors when available so same-document
+                    # entries follow their source order in the generated index.
+                    index_match = re.search(r"index-(\d+)$", anchor)
+                    if index_match:
+                        anchor_pos = (0, int(index_match.group(1)))
+                    else:
+                        anchor_map = anchor_positions.get(docname, {})
+                        anchor_pos = (1, anchor_map.get(anchor, 10**9))
+
+                    return (doc_pos, anchor_pos)
+
+                links.sort(key=sort_key)
+
+                entries[i] = (term, (links, subitems, key))
+
+        return content
+
+    IndexEntries.create_index = custom_create_index
+
+
+# --------------------------------------------------
+# Helpers
+# --------------------------------------------------
+
+def build_doc_order(env):
+    """
+    Build document order based on the external TOC file order.
+    """
+    order = {}
+    counter = [0]
+
+    def normalize_docname(path):
+        if not path:
+            return None
+        normalized = path.replace("\\", "/")
+        return str(PurePosixPath(normalized).with_suffix(""))
+
+    def add_doc(path):
+        docname = normalize_docname(path)
+        if docname and docname not in order:
+            order[docname] = counter[0]
+            counter[0] += 1
+
+    def walk_item(item):
+        if not isinstance(item, dict):
+            return
+
+        add_doc(item.get("file"))
+
+        for key in ("parts", "chapters", "sections"):
+            for child in item.get(key, []) or []:
+                walk_item(child)
+
+    toc_name = getattr(env.config, "external_toc_path", "_toc.yml")
+    toc_path = toc_name if os.path.isabs(toc_name) else os.path.join(env.app.srcdir, toc_name)
+
+    if os.path.exists(toc_path):
+        try:
+            with open(toc_path, "r", encoding="utf-8") as toc_file:
+                toc_data = yaml.safe_load(toc_file) or {}
+        except Exception as exc:
+            pass
+        else:
+            add_doc(toc_data.get("root"))
+            for part in toc_data.get("parts", []) or []:
+                walk_item(part)
+
+    # fallback: include any missing docs
+    for doc in env.found_docs:
+        if doc not in order:
+            order[doc] = counter[0]
+            counter[0] += 1
+
+    return order
+
+
+def build_anchor_positions(env):
+    """
+    Build approximate top-to-bottom order of anchors per document
+    """
+    positions = {}
+
+    for docname in env.found_docs:
+        try:
+            doctree = env.get_doctree(docname)
+        except FileNotFoundError:
+            continue
+        pos = {}
+        counter = 0
+
+        for node in doctree.traverse():
+            if not isinstance(node, nodes.Element):
+                continue
+            ids = node.get("ids", [])
+            for anchor in ids:
+                pos[anchor] = counter
+            counter += 1
+
+        positions[docname] = pos
+
+    return positions
