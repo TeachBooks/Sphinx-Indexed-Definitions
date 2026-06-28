@@ -23,14 +23,6 @@ This extension can be used in conjunction with the regular usage of generating a
 
 If one `prf:definition` admonition contains a single term several times, it will only be added once to the index. If the same term is used in several admonitions, it will be added to the index with multiple references.
 
-If a term has multiple references, the generated index will attempt to sort these references in the order of appearance in the source code.
-
-> [!WARNING]
-> The sorting in this extension assumes that the extension `Sphinx-external-toc` is used to define the table of contents.
-
-> [!WARNING]
-> The sorting in this extension patches the native Sphinx index sorting behavior.
-
 Footnotes in terms will be removed, and the term will be added to the index without the footnote.
 
 ## Installation
