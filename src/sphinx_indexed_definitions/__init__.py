@@ -1,6 +1,9 @@
 from sphinx.application import Sphinx
-from sphinx_proof.proof_type import DefinitionDirective, TheoremDirective, LemmaDirective, ConjectureDirective, CorollaryDirective, PropositionDirective, NotationDirective
+from sphinx_proof.proof_type import DefinitionDirective, TheoremDirective, LemmaDirective, ConjectureDirective, CorollaryDirective, PropositionDirective, NotationDirective, ExampleDirective, RemarkDirective
+import random
 import re
+import string
+import time
 from docutils import nodes
 
 SUPPORTED_NODES = ['strong','emphasis','literal']
@@ -12,12 +15,44 @@ CAPITAL_WORDS = list({'Cartesian','Markov','Euler','Neumann','Newton','Gauss','L
                       'Boole','Dirichlet','Euclid','Leibniz','Benford','Boyer','Dijkstra','Huygens','Lambert','Poisson','Weierstrass','Abel','Descartes','Fibonacci',
                       'Hôpital','Poincaré','Volterra','Lotka','Cramer','Schwarz','Cayley','Hamilton','Perron'})
 
+class PatchedExampleDirective(ExampleDirective):
+    
+    def run(self):        
+    
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
+        # first the normal parse:
+        def_nodes = DefinitionDirective.run(self)
+        return def_nodes
+
+class PatchedRemarkDirective(RemarkDirective):
+    
+    def run(self):        
+    
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
+        # first the normal parse:
+        def_nodes = DefinitionDirective.run(self)
+        return def_nodes
+    
 class IndexedDefinitionDirective(DefinitionDirective):
 
     def run(self):        
 
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
         # first the normal parse:
         def_nodes = DefinitionDirective.run(self)
+
         # get the classes and do no index stuff if told so.
         classes = self.options.get('class')
         if classes is not None:
@@ -167,6 +202,8 @@ def setup(app: Sphinx):
     app.add_directive_to_domain('prf','corollary',IndexedCorollaryDirective,override=True)
     app.add_directive_to_domain('prf','proposition',IndexedPropositionDirective,override=True)
     app.add_directive_to_domain('prf','notation',IndexedNotationDirective,override=True)
+    app.add_directive_to_domain('prf','example',PatchedExampleDirective,override=True)
+    app.add_directive_to_domain('prf','remark',PatchedRemarkDirective,override=True)
 
     return {}
 
@@ -181,6 +218,11 @@ class IndexedTheoremDirective(TheoremDirective):
 
     def run(self):        
 
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
         # first the normal parse:
         def_nodes = TheoremDirective.run(self)
         # get the classes and do no index stuff if told so.
@@ -199,7 +241,12 @@ class IndexedTheoremDirective(TheoremDirective):
     
 class IndexedLemmaDirective(LemmaDirective):
 
-    def run(self):        
+    def run(self):
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
 
         # first the normal parse:
         def_nodes = LemmaDirective.run(self)
@@ -220,7 +267,11 @@ class IndexedLemmaDirective(LemmaDirective):
 class IndexedConjectureDirective(ConjectureDirective):
 
     def run(self):        
-
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
         # first the normal parse:
         def_nodes = ConjectureDirective.run(self)
         # get the classes and do no index stuff if told so.
@@ -240,7 +291,11 @@ class IndexedConjectureDirective(ConjectureDirective):
 class IndexedCorollaryDirective(CorollaryDirective):
 
     def run(self):        
-
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
         # first the normal parse:
         def_nodes = CorollaryDirective.run(self)
         # get the classes and do no index stuff if told so.
@@ -260,7 +315,11 @@ class IndexedCorollaryDirective(CorollaryDirective):
 class IndexedPropositionDirective(PropositionDirective):
 
     def run(self):        
-
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
         # first the normal parse:
         def_nodes = PropositionDirective.run(self)
         # get the classes and do no index stuff if told so.
@@ -280,7 +339,11 @@ class IndexedPropositionDirective(PropositionDirective):
 class IndexedNotationDirective(NotationDirective):
 
     def run(self):        
-
+        # zero-th step: assign a random label if none has been set
+        if not self.options.get("label"):
+            timestamp_ms = time.time_ns() // 1_000_000
+            suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            self.options["label"] = f"{timestamp_ms:x}{suffix}"
         # first the normal parse:
         def_nodes = NotationDirective.run(self)
         # get the classes and do no index stuff if told so.
